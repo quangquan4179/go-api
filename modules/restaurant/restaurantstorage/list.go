@@ -17,7 +17,7 @@ func (store *SqlStore) ListDataByCondition(ctx context.Context,
 		for i:= range moreInfos {
 			db = db.Preload(moreInfos[i])
 		}
-		db  = db.Table(restaurantmodel.Restaurant{}.TableName()).Where(conditions)
+		db  = db.Table(restaurantmodel.Restaurant{}.TableName()).Where(conditions).Where(map[string]interface{}{"status":1})
 
 		if v:= filter; v !=nil {
 			if v.CityId>0 {

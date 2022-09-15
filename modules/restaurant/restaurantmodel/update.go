@@ -1,10 +1,10 @@
 package restaurantmodel
 
-type RestaurantUpate struct {
+type RestaurantUpdate struct {
 	
 	Name *string `json:"name" gorm:"column:name;"`
 	Addr *string `json:"address" gorm:"column:addr;"`
 }
-func (RestaurantUpate) TableName() string {
+func (RestaurantUpdate) TableName() string {
 	return Restaurant{}.TableName()
 }

@@ -6,7 +6,7 @@ import (
 
 type CreateRestaurantStore interface{
 	Create(context context.Context, data *restaurantmodel.RestaurantCreate) error 
-	Find(ctx context.Context, conditions map[string]interface{}, moreInfos ...string)(*restaurantmodel.Restaurant, error)
+	FindDataByCondition(ctx context.Context, conditions map[string]interface{}, moreInfos ...string)(*restaurantmodel.Restaurant, error)
 }
 type createRestaurantBiz struct {
 	store CreateRestaurantStore
