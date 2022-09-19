@@ -8,6 +8,8 @@ import (
 	"quan/go/middleware"
 	"quan/go/modules/auth/authhdl"
 	"quan/go/modules/restaurant/restauranttransport/ginrestaurant"
+	"quan/go/modules/upload/uploadtransport/ginupload"
+
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -45,7 +47,7 @@ func runServer(db *gorm.DB) {
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "pong"})
 	})
-
+	r.POST("/upload", ginupload.Upload(AppCtx))
 	v1 := r.Group("/v1")
 
 	restaurant := v1.Group("/restaurants")
