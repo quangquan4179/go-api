@@ -3,21 +3,20 @@ package authhdl
 import (
 	"net/http"
 	"quan/go/common"
+	"quan/go/component"
 
 	"quan/go/modules/auth/authmodel"
 	"quan/go/modules/auth/authrepo"
 	"quan/go/modules/user/userstorage"
 
-
-
 	"github.com/gin-gonic/gin"
 )
 
 
-func Register(appCtx common.AppContext) gin.HandlerFunc {
+func Register(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		db := appCtx.GetDBConnection()
+		db := appCtx.GetMainDBConnection()
 		var user authmodel.CreateUser
 
 		if err := c.ShouldBind(&user); err != nil {

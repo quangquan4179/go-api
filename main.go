@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	appctx "quan/go/appCtx"
+	"quan/go/component"
+	"quan/go/middleware"
 	"quan/go/modules/auth/authhdl"
 	"quan/go/modules/restaurant/restauranttransport/ginrestaurant"
 
@@ -35,10 +36,11 @@ func main() {
 }
 
 func runServer(db *gorm.DB) {
-	AppCtx := appctx.NewAppContext(db)
-	// gin.SetMode(gin.ReleaseMode)
+	AppCtx := component.NewAppContext(db)
+	// gin.SetMode(gin.ReleaseMode
 
 	r := gin.Default()
+	r.Use(middleware.Recover(AppCtx))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "pong"})
@@ -48,11 +50,11 @@ func runServer(db *gorm.DB) {
 
 	restaurant := v1.Group("/restaurants")
 	{
-		restaurant.GET("/:id", ginrestaurant.GetRestaurant(db))
-		restaurant.DELETE("/:id", ginrestaurant.DeleteRestaurant(db))
-		restaurant.POST("", ginrestaurant.CreateRestaurant(db))
-		restaurant.GET("", ginrestaurant.ListRestaurant(db))
-		restaurant.PATCH("/:id", ginrestaurant.UpdateRestaurant(db))
+		restaurant.GET("/:id", ginrestaurant.GetRestaurant(AppCtx))
+		restaurant.DELETE("/:id", ginrestaurant.DeleteRestaurant(AppCtx))
+		restaurant.POST("", ginrestaurant.CreateRestaurant(AppCtx))
+		restaurant.GET("", ginrestaurant.ListRestaurant(AppCtx))
+		restaurant.PATCH("/:id", ginrestaurant.UpdateRestaurant(AppCtx))
 
 	}
 

@@ -6,28 +6,25 @@ import (
 	"quan/go/modules/restaurant/restaurantbiz"
 	"quan/go/modules/restaurant/restaurantmodel"
 	"quan/go/modules/restaurant/restaurantstorage"
+	"quan/go/component"
+
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 
-func CreateRestaurant(db  *gorm.DB) gin.HandlerFunc{
+func CreateRestaurant(atx component.AppContext) gin.HandlerFunc{
 	return func(c *gin.Context) {
 		var data restaurantmodel.RestaurantCreate
 		if err:= c.ShouldBind(&data); err!=nil{
-			c.JSON(http.StatusBadRequest,common.ErrInvalidRequest(err))
-			return
+			panic(common.ErrInvalidRequest(err))
 
 		}
 
-		store := restaurantstorage.NewSqlStore(db);
+		store := restaurantstorage.NewSqlStore(atx.GetMainDBConnection());
 		biz := restaurantbiz.NewCreateRestaurantBiz(store)
 		if err:=biz.CreateRestaurant(c.Request.Context(),&data); err != nil{
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error":err.Error(),
-			})
-			return
+			panic(err)
 
 		}
 		c.JSON(http.StatusOK,data)

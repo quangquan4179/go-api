@@ -5,7 +5,7 @@ import "quan/go/common"
 const EntityName = "User"
 
 type User struct {
-	common.SQLModel `json:", inline"`
+	common.SQLModel `json:",inline"`
 	Email           string          `json:"email" gorm:"column:email;"`
 	Password        string          `json:"-" gorm:"column:password;"`
 	LastName        string          `json:"last_name" gorm:"column:last_name;"`

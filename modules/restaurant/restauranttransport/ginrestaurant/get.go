@@ -3,30 +3,30 @@ package ginrestaurant
 import (
 	"net/http"
 	"quan/go/common"
+	"quan/go/component"
 	"quan/go/modules/restaurant/restaurantbiz"
 	"quan/go/modules/restaurant/restaurantstorage"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 
-func GetRestaurant(db*gorm.DB) gin.HandlerFunc{
+func GetRestaurant(atx component.AppContext) gin.HandlerFunc{
 	return func(ctx *gin.Context) {
 		id, err := strconv.Atoi(ctx.Param("id"))
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest,common.ErrInvalidRequest(err))
-			return
+			panic(common.ErrInvalidRequest(err))
 		}
-		store := restaurantstorage.NewSqlStore(db)
+
+
+		store := restaurantstorage.NewSqlStore(atx.GetMainDBConnection())
 		biz :=restaurantbiz.NewGetRestaurantBiz(store)
 
 		data, errNew := biz.GetRestaurant(ctx.Request.Context(),id)
 
 		if errNew!=nil{
-			ctx.JSON(400,errNew)
-			return
+			panic(errNew)
 		}
 
 		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
