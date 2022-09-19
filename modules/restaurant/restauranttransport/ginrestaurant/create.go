@@ -27,6 +27,7 @@ func CreateRestaurant(atx component.AppContext) gin.HandlerFunc{
 			panic(err)
 
 		}
-		c.JSON(http.StatusOK,data)
+		data.GenUID(common.DbTypeRestaurant)
+		c.JSON(http.StatusOK,common.SimpleSuccessResponse(data.FakeId))
 	}
 }

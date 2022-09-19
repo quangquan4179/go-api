@@ -7,7 +7,7 @@ import (
 	"quan/go/modules/restaurant/restaurantbiz"
 	"quan/go/modules/restaurant/restaurantmodel"
 	"quan/go/modules/restaurant/restaurantstorage"
-	"strconv"
+	// "strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,9 @@ import (
 func UpdateRestaurant(atz component.AppContext) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var data restaurantmodel.RestaurantUpdate
-		id, err := strconv.Atoi(ctx.Param("id"))
+		// id, err := strconv.Atoi(ctx.Param("id"))
+		uid, err := common.FromBase58(ctx.Param("id"))
+
 		if err != nil {
 			panic(common.ErrInvalidRequest(err))
 		}
@@ -27,7 +29,7 @@ func UpdateRestaurant(atz component.AppContext) gin.HandlerFunc {
 		store := restaurantstorage.NewSqlStore(atz.GetMainDBConnection())
 		biz := restaurantbiz.NewUpdateRestaurantBiz(store)
 
-		if err := biz.UpdateRestaurant(ctx.Request.Context(), id, &data); err != nil {
+		if err := biz.UpdateRestaurant(ctx.Request.Context(), int(uid.GetLocalID()), &data); err != nil {
 			panic(err)
 
 		}

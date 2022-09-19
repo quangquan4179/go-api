@@ -16,3 +16,8 @@ type Restaurant struct {
 func (Restaurant) TableName() string {
 	return "restaurants"
 }
+
+
+func (data*Restaurant)Mask(isAdminOrOwner bool){
+	data.GenUID(common.DbTypeRestaurant)
+}
